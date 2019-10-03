@@ -1,0 +1,31 @@
+{
+  "name": "deliciously",
+  "version": "1.0.0",
+  "description": "io.deliciously.Deliciously api mobile",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://VRSquadTeam@bitbucket.org/VRSquadTeam/deliciously-api.git"
+  },
+  "keywords": [
+    "api",
+    "deliciously"
+  ],
+  "author": "Muhammad IRSHAD",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/VRSquadTeam/deliciously-api#readme",
+  "dependencies": {
+    "body-parser": "1.15.2",
+    "cors": "2.8.4",
+    "express": "4.14.0",
+    "mysql2": "^1.6.1",
+    "nodemon": "1.18.4",
+    "bcrypt": "^3.0.6",
+    "jsonwebtoken": "7.4.2",
+    "sequelize": "4.38.0"
+  }
+}
