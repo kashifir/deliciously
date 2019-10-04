@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 
-var cors = require("cors");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
 var db = require("../database/db")

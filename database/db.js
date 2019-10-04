@@ -22,20 +22,19 @@ const db ={};
 /**
  * new Sequelize({database},{username},{password},options{
  *     host:{hostname},
- *     dialect:  one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' , The dialect of the database you are connecting to. One of mysql, postgres, sqlite and mssql.
- *     port: if you don't have change you mysql default port it will 3306, or if you change make sure to use you port ,
- *     operatorsAliases: {false},
- *     pool: { sequelize connection pool configuration
- *         max: { 5 numbre of max conn in you database}, Maximum number of connection in pool default: 5
- *         min: {0 } Minimum number of connection in pool,default: 0,
- *         acquire: {30000 } The maximum time, in milliseconds, that pool will try to get connection before throwing error, default 60000,
- *         idle: { 10000 } The maximum time, in milliseconds, that a connection can be idle before being released.
+ *     dialect:  one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' , The dialect of the database you are connecting to.
+ * One of mysql, postgres, sqlite and mssql. port: if you don't have change you mysql default port it will 3306, or if
+ * you change make sure to use you port , operatorsAliases: {false}, pool: { sequelize connection pool configuration
+ * max: { 5 numbre of max conn in you database}, Maximum number of connection in pool default: 5 min: {0 } Minimum
+ * number of connection in pool,default: 0, acquire: {30000 } The maximum time, in milliseconds, that pool will try to
+ * get connection before throwing error, default 60000, idle: { 10000 } The maximum time, in milliseconds, that a
+ * connection can be idle before being released.
  *     }
  *
  * @type {Sequelize}
  */
 
-const dbinfo = new Sequelize("Deliciously","root","root",{
+const dbinfo = new Sequelize("deliciously","root","root",{
     host: "localhost",
     dialect: "mysql",
     port: 3306,
@@ -72,26 +71,44 @@ dbinfo.authenticate()
  *
  */
 
-db.user = require('../models/User')(dbinfo, Sequelize);
+db.User = require('../models/User')(dbinfo, Sequelize);
+db.Accueil = require('../models/Accueil')(dbinfo, Sequelize);
+db.Avis = require('../models/Avis')(dbinfo, Sequelize);
+db.BageResto = require('../models/BageResto')(dbinfo,Sequelize);
+db.BageVister = require('../models/BagesVister')(dbinfo,Sequelize);
+db.Couleur = require('../models/Couleur')(dbinfo,Sequelize);
+db.Icon = require('../models/Icon')(dbinfo,Sequelize);
+db.Liste = require('../models/Liste')(dbinfo,Sequelize);
+db.UserType = require('../models/UserType')(dbinfo,Sequelize);
+db.UserHasType = require('../models/userhastype')(dbinfo,Sequelize);
+db.Paye = require('../models/Paye')(dbinfo, Sequelize);
+db.Resto = require('../models/Resto')(dbinfo, Sequelize);
+db.Favoris = require('../models/Favoris')(dbinfo, Sequelize);
+
 
 
 /************************************** End block  Require models/tables **********************************************
  ***********************************************************************************************************************
-
-
  /**
  * There are four type of associations available in Sequelize
  *
- * BelongsTo     :  associations are associations where the foreign key for the one-to-one relation exists on the source model.
- * HasOne        :  associations are associations where the foreign key for the one-to-one relation exists on the target model.
- * HasMany       :  associations are connecting one source with multiple targets. The targets however are again connected to exactly one specific source.
- * BelongsToMany :  associations are used to connect sources with multiple targets. Furthermore the targets can also have connections to multiple sources.
+ * BelongsTo     :  associations are associations where the foreign key for the one-to-one relation exists on the
+ * source model. HasOne        :  associations are associations where the foreign key for the one-to-one relation
+ * exists on the target model. HasMany       :  associations are connecting one source with multiple targets. The
+ * targets however are again connected to exactly one specific source. BelongsToMany :  associations are used to
+ * connect sources with multiple targets. Furthermore the targets can also have connections to multiple sources.
  *
  ************************************** Start Relation **********************************************
- ***********************************************************************************************
- *
- *  the garage can have Many atelier : atelier: 1,1  garage : 1,N
- */
+ ***********************************************************************************************/
+
+
+
+// many to many 1,N ET 1,N
+db.User.belongsToMany(db.Paye, { through: 'uservister', foreignKey: "UserId" });
+db.Paye.belongsToMany(db.User, { through: 'uservister', foreignKey: "PayeId" });
+
+db.Resto.belongsToMany(db.BageResto, {through: 'bagesresto', foreignKey: "RestoId"});
+db.BageResto.belongsToMany(db.Resto, {through: 'bagesresto', foreignKey: "BageId"})
 
 
 /**************************************************** End of block Relation ***************************************************
@@ -106,11 +123,11 @@ db.Sequelize = Sequelize;
  * similar for sync: you can define this to always force sync for models
  */
 
-//dbinfo.sync({ force: true });
+dbinfo.sync({ force: true });
 
 /**
- * The module.exports or exports is a special object which is included in every JS file in the Node.js application by default.
- * module is a variable that represents current module and exports is an object that will be exposed as a module.
- * So, whatever you assign to module.exports or exports, will be exposed as a module.
+ * The module.exports or exports is a special object which is included in every JS file in the Node.js application by
+ * default. module is a variable that represents current module and exports is an object that will be exposed as a
+ * module. So, whatever you assign to module.exports or exports, will be exposed as a module.
  **/
 module.exports = db;

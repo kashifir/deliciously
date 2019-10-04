@@ -19,13 +19,19 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/VRSquadTeam/deliciously-api#readme",
   "dependencies": {
+    "Express": "^3.0.1",
+    "ExpressNode": "^1.0.0",
+    "bcrypt": "^3.0.6",
     "body-parser": "1.15.2",
     "cors": "2.8.4",
     "express": "4.14.0",
+    "jsonwebtoken": "7.4.2",
     "mysql2": "^1.6.1",
     "nodemon": "1.18.4",
-    "bcrypt": "^3.0.6",
-    "jsonwebtoken": "7.4.2",
-    "sequelize": "4.38.0"
+    "sequelize": "^4.38.0",
+    "sequelize-auto-import": "^1.1.0",
+    "sequelize-datatables": "^1.2.1",
+    "sequelize-definer": "^0.4.6",
+    "sequelize-express-framework": "^1.0.0"
   }
 }
