@@ -2,7 +2,7 @@
 module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
         // name of table
-        "Icon",
+        "Badge",
         {
             // field name
             id: {
@@ -13,9 +13,11 @@ module.exports = (dbinfo, Sequelize) => {
                 // set autoOncrement = true
                 autoIncrement: true
             },
-            Name: {
-                //set data type with out max length
+            Name:{
+                //set data type with max length
                 type: Sequelize.DataTypes.TEXT,
+                // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
+                allowNull: true
             },
             Status:{
                 //set data type with max length

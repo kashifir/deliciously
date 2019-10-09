@@ -2,7 +2,7 @@
 module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
         // name of table
-        "User",
+        "Restaurant",
         {
             // field name
             id: {
@@ -10,24 +10,35 @@ module.exports = (dbinfo, Sequelize) => {
                 type: Sequelize.DataTypes.INTEGER,
                 // set primaryKey = true
                 primaryKey: true,
-                // set autoIncrement = true 
+                // set autoOncrement = true
                 autoIncrement: true
             },
-            UName: {
+            RName: {
                 //set data type with max length
-                type: Sequelize.DataTypes.STRING(45),
+                type: Sequelize.DataTypes.STRING(255),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: true
             },
-            UFirstName: {
+            RStreetNum: {
                 //set data type with max length
-                type: Sequelize.DataTypes.STRING(45),
+                type: Sequelize.DataTypes.STRING(10),
+                // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
+                allowNull: true
+            },RStreet: {
+                //set data type with max length
+                type: Sequelize.DataTypes.STRING(255),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: true
             },
-            ULastName: {
+            RCity: {
                 //set data type with max length
-                type: Sequelize.DataTypes.STRING(45),
+                type: Sequelize.DataTypes.STRING(255),
+                // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
+                allowNull: true
+            },
+            RPostalCode: {
+                //set data type with max length
+                type: Sequelize.DataTypes.STRING(10),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: true
             },
@@ -38,35 +49,55 @@ module.exports = (dbinfo, Sequelize) => {
                 allowNull: true
             },
 
-            UEmail: {
+            RDescription: {
                 //set data type with max length
                 type: Sequelize.DataTypes.STRING(255),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: false
             },
-            UPassword: {
+            RLongitude: {
                 //set data type with out  max length
-                type: Sequelize.DataTypes.STRING,
+                type: Sequelize.DataTypes.TEXT,
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: false,
             },
-            USex:{
+            RLatitude:{
                 //set data type with out  max length
                 type: Sequelize.DataTypes.TEXT,
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: true
             },
-            UFaceBook:{
+            RContact:{
                 //set data type with max length
                 type: Sequelize.DataTypes.STRING(100),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: true
-            },FBId:{
+            },MapIcon:{
                 //set data type with max length
                 type: Sequelize.DataTypes.STRING(100),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: true
-            },FBImageURL:{
+            },RPriceDes:{
+                //set data type with max length
+                type: Sequelize.DataTypes.STRING(255),
+                // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
+                allowNull: true
+            },RAddress:{
+                //set data type with max length
+                type: Sequelize.DataTypes.STRING(100),
+                // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
+                allowNull: true
+            },RMetro:{
+                //set data type with max length
+                type: Sequelize.DataTypes.STRING(100),
+                // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
+                allowNull: true
+            },RRecommendation:{
+                //set data type with max length
+                type: Sequelize.DataTypes.STRING(255),
+                // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
+                allowNull: true
+            },PlaceId:{
                 //set data type with max length
                 type: Sequelize.DataTypes.STRING(100),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column

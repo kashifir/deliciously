@@ -2,7 +2,7 @@
 module.exports = (dbinfo, Sequelize) => {
     return dbinfo.define(
         // name of table
-        "Icon",
+        "Country",
         {
             // field name
             id: {
@@ -16,6 +16,10 @@ module.exports = (dbinfo, Sequelize) => {
             Name: {
                 //set data type with out max length
                 type: Sequelize.DataTypes.TEXT,
+            },
+            Code: {
+                //set data type with out max length
+                type: Sequelize.DataTypes.INTEGER,
             },
             Status:{
                 //set data type with max length
