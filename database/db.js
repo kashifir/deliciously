@@ -7,6 +7,8 @@
  * I am assuming you have some form of SQL database service started on your machine. I am currently using MySQL.
  * */
 const Sequelize = require('sequelize');
+const confiAuth = require("../config/auth");
+
 
 
 /************************************** end Require module **********************************************
@@ -34,9 +36,9 @@ const db ={};
  * @type {Sequelize}
  */
 
-const dbinfo = new Sequelize("deliciously","root","root",{
-    host: "localhost",
-    dialect: "mysql",
+const dbinfo = new Sequelize(confiAuth.development.database,confiAuth.development.username,confiAuth.development.password,{
+    host: confiAuth.development.host,
+    dialect: confiAuth.development.dialect,
     port: 3306,
     pool:{
         max:5,

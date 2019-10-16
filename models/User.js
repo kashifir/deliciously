@@ -10,7 +10,7 @@ module.exports = (dbinfo, Sequelize) => {
                 type: Sequelize.DataTypes.INTEGER,
                 // set primaryKey = true
                 primaryKey: true,
-                // set autoIncrement = true 
+                // set autoIncrement = true
                 autoIncrement: true
             },
             UName: {
@@ -42,13 +42,13 @@ module.exports = (dbinfo, Sequelize) => {
                 //set data type with max length
                 type: Sequelize.DataTypes.STRING(255),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
-                allowNull: false
+                allowNull: true
             },
             UPassword: {
                 //set data type with out  max length
                 type: Sequelize.DataTypes.STRING,
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
-                allowNull: false,
+                allowNull: true,
             },
             USex:{
                 //set data type with out  max length
@@ -68,10 +68,14 @@ module.exports = (dbinfo, Sequelize) => {
                 allowNull: true
             },FBImageURL:{
                 //set data type with max length
-                type: Sequelize.DataTypes.STRING(100),
+                type: Sequelize.DataTypes.STRING(255),
                 // setting allowNull to false will add NOT NULL to the column, which means an error will be if you add info in this column
                 allowNull: true
             },
+            Image:{
+                type: Sequelize.DataTypes.STRING(255),
+                allowNull: true
+            }
         },
         {
             /**
