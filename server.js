@@ -1,29 +1,37 @@
-var express = require("express");
-var bodyParser =  require("body-parser");
-var session = require("express-session");
-var passport = require('passport');
+let express = require("express");
+let bodyParser =  require("body-parser");
+let session = require("express-session");
+let passport = require('passport');
 
 // require routes
-var Ruser = require("./routes/user")(passport);
+let user = require("./routes/user")(passport);
+let filter = require("./routes/Filter");
+let restaurant = require("./routes/restaurant");
+let Subcate = require("./routes/subcategorie");
 
 
 
-var cors = require("cors");
+let cors = require("cors");
 
 
 
-var port = 3000;
+let port = 3000;
 
-var app =  express();
+let app =  express();
+
 app.use(cors());
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static("public"));
 
 // diefind prifix for route
-app.use("/api",Ruser);
-app.use("/api",require('./routes/restaurant'));
+app.use("/api",user);
+app.use("/Restaurant",restaurant);
+app.use("/api",filter);
+app.use("/api",Subcate);
 
 
 app.listen(port, function () {

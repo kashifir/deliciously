@@ -144,7 +144,8 @@ db.Subcategory.hasMany(db.ResSubCategory, {foreignKey: 'subcategoryId'});
 
 db.Country.hasOne(db.Restaurant, {foreignKey: 'countryId'});
 
-db.Restaurant.hasOne(db.ResFilterIcon, {foreignKey: 'restaurantId'});
+db.Restaurant.hasMany(db.ResFilterIcon, {foreignKey: 'restaurantId'});
+db.ResFilterIcon.belongsTo(db.Restaurant, {foreignKey: 'restaurantId'});
 db.Icon.hasOne(db.ResFilterIcon, {foreignKey: 'iconId'});
 
 db.Restaurant.hasOne(db.Favourite, {foreignKey: 'restaurantId'});

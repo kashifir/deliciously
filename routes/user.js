@@ -15,10 +15,7 @@ module.exports = function(passport) {
     router.post("/signup", (req, res) => {
         console.log(req.body);
 
-        var userDate = {
-            UEmail: req.body.uEmail,
-            UPassword: req.body.uPassword
-        };
+
         // find is user exist or not
         db.user.findOne({
             where: {UEmail: req.body.uEmail}
@@ -28,8 +25,11 @@ module.exports = function(passport) {
                 if (!user) {
                     // make hash of password in bcrypt, salt 10
                     const hash = bcrypt.hashSync(req.body.uPassword, 10);
-                    userDate.UPassword = hash;
-                    db.user.create(userDate)
+                    password = hash;
+                    db.user.create({
+                        UEmail: req.body.uEmail,
+                        UPassword: password
+                    })
                         .then(user => {
                             res.status(200).json({user: user})
                         })
