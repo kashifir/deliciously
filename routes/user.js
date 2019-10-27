@@ -2,7 +2,9 @@ var express = require("express");
 var router = express.Router();
 
 var bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
 var db = require("../database/db");
+
 var FacebookStrategy = require('passport-facebook').Strategy;
 var confiAuth = require("../config/auth");
 
@@ -13,9 +15,6 @@ process.env.SECRET_KEY = 'secret';
 module.exports = function(passport) {
 
     router.post("/signup", (req, res) => {
-        console.log(req.body);
-
-
         // find is user exist or not
         db.user.findOne({
             where: {UEmail: req.body.uEmail}
@@ -73,24 +72,61 @@ module.exports = function(passport) {
             .catch(err => {
                 res.status(400).json(err);
             })
-    })
+    });
 
 // login
 
     router.post("/login", (req, res) => {
         console.log(req.body);
         db.user.findOne({
-            where: {UEmail: req.body.uEmail},
+            where:{UEmail: req.body.uEmail}
+        })
+        .then(user => {
+                if(user) {
+
+                    if (bcrypt.compareSync(req.body.uPassword,user.UPassword)) {
+                        res.status(200).json({user: user})
+                    } else {
+                        res.status(400).send({error: 'error mail or error password'})
+                    }
+                }
+                else {
+                    return res.status(400).send({
+                        error: 'user not fond'
+                    });
+                }
+            })
+                .catch(err => {
+                    res.send('error' + err)
+                })
+    });
+
+    router.post("/loginsite", (req, res) => {
+        console.log(req.body);
+        db.user.findOne({
+            where:{UEmail: req.body.email}
         })
             .then(user => {
-                if (bcrypt.compareSync(req.body.upassword, user.upassword)) {
-                    res.json(user)
-                } else {
-                    res.send('email ou le mot de passe ')
+                if(user) {
+                    console.log(bcrypt.compareSync(req.body.password,user.UPassword));
+                    if (bcrypt.compareSync(req.body.password,user.UPassword)) {
+                        let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
+                            expiresIn: 1440
+                        });
+                        res.status(200).json({token: token})
+                    } else {
+                        res.status(520).json('error mail or error password')
+                    }
                 }
-            }).catch(err => {
-            res.send('error ' + err)
-        })
+                else {
+                    return res.status(400).send({
+                        error: 'user not fond'
+                    });
+                }
+            })
+            .catch(err => {
+                res.send('error' + err)
+            })
     });
 
 
@@ -111,21 +147,32 @@ module.exports = function(passport) {
         }));
 
     passport.use(new FacebookStrategy({
+        // id de l'app facebook
             clientID: confiAuth.facebookAuth.clientID,
+        // cle secret de l'app facebook
             clientSecret: confiAuth.facebookAuth.clientSecret,
+        // perment de fait la redirection si la conn a éte
+        // fait dans cas envoi sur la page /
+        // sinon sur la page d'accueil
             callbackURL: confiAuth.facebookAuth.callbackURL,
             enableProof: true,
+        // les information que on récuperer via facebook pour les
+        //  user
             profileFields: ['id', 'displayName', 'emails', 'photos']
         },
         function (accessToken, refreshToken, profile, done) {
-
+            // perment de fait un callback
             process.nextTick(function () {
+                // recherche un client via l'id de sont facebook
                 db.user.findOne({
                     where: {'FBId': profile.id}
                 })
                     .then(user => {
+                        // si le client exits
                         if (user) {
+                            // return client
                           done(user)
+                            // sinon  on client créer le client
                         } else {
                             db.user.create({
                                 'FBId': profile.id,
@@ -136,14 +183,17 @@ module.exports = function(passport) {
                                 'FBImageURL' : profile.photos[0].value
                             })
                                 .then(newuser => {
+                                    // return nouveaux client
                                     done(newuser);
                                 })
                                 .catch(err => {
+                                    // return error
                                     done(err);
                                 })
                         }
                     })
                     .catch(err => {
+                        // si error alors return error
                         if (err) {
                            done(err)
                         }
@@ -151,6 +201,37 @@ module.exports = function(passport) {
             })
         }
     ));
+
+
+    router.post("/addVisitedContry",(req,res) => {
+        db.VisitedCountry.create(req.body)
+            .then(newVisited => {
+                res.status(200).json(newVisited)
+            })
+            .catch(err => {
+                res.status(400).json("Bad data")
+            })
+    });
+
+    router.post("/addVisitedRestaurant",(req,res) => {
+        db.VisitedRestaurant.create(res.body)
+            .then(Visited => {
+                res.status(200).json(Visited)
+            })
+            .catch(err => {
+                res.status(400).json(err)
+            })
+    });
+
+    router.post("/addFavouriteRestaurant",(req,res) => {
+        db.Favourite.create(req.body)
+            .then(Favourite => {
+                res.status(200).json(Favourite)
+            })
+            .catch(err => {
+                res.status(400).json(err)
+            })
+    });
 
 
     return router;

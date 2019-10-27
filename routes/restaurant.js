@@ -37,9 +37,30 @@ let db = require("../database/db");
     });
 
     resto.get("/RestaurantById/:id", (req,res) => {
-        console.log(req.params.id);
         db.Restaurant.findOne({
-            where:{id: req.params.id}
+            where:{id: req.params.id},
+            attributes: {
+                include: [],
+                // don't need to show this filed
+                exclude: ["updated_at", "created_at"]
+            },
+        })
+            .then(rep => {
+                res.status(200).send(rep);
+            })
+            .catch(err =>{
+                res.status(400).send(err);
+            })
+    });
+
+ resto.get("/RestaurantByStauts/:RestaurantByStauts", (req,res) => {
+        db.Restaurant.findOne({
+            where:{id: req.params.id},
+            attributes: {
+                include: [],
+                // don't need to show this filed
+                exclude: ["updated_at", "created_at"]
+            },
         })
             .then(rep => {
                 res.status(200).send(rep);
@@ -99,7 +120,8 @@ let db = require("../database/db");
 
     resto.get("/getRestaurantFavourit/:id",(req,res) =>{
         db.Favourite.findAll({
-            where:{userId : req.params.id}
+            where:{userId : req.params.id},
+
         })
             .then(restorep =>{
                 res.status(200).send(restorep)

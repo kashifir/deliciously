@@ -5,8 +5,6 @@ let cors = require("cors");
 let db = require("../database/db");
 
 
-
-
 filter.get("/Allfilter",cors(),(req,res,next) => {
    db.ResFilterIcon.findAll()
        .then(Filter => {
@@ -43,6 +41,23 @@ filter.get("/filter/:by",(req,res) => {
             })
         })
 });
+
+filter.get("/filter/:Status",(req,res) => {
+    db.Restaurant.findAll({
+        where: {Status: req.params.by},
+
+    })
+        .then(resto => {
+            res.status(200).json(resto)
+        })
+        .catch(err => {
+            res.status(404).send({
+                message: "not found",
+                erreur: err
+            })
+        })
+});
+
 
 filter.get("/Allfilter/:by",(req,res) => {
     db.ResFilterIcon.findAll({

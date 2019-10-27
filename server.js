@@ -8,6 +8,7 @@ let user = require("./routes/user")(passport);
 let filter = require("./routes/Filter");
 let restaurant = require("./routes/restaurant");
 let Subcate = require("./routes/subcategorie");
+let Country = require("./routes/Country");
 
 
 
@@ -30,6 +31,7 @@ app.use(express.static("public"));
 // diefind prifix for route
 app.use("/api",user);
 app.use("/Restaurant",restaurant);
+app.use("/country",Country);
 app.use("/api",filter);
 app.use("/api",Subcate);
 
