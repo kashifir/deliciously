@@ -1,7 +1,7 @@
 module.exports = {
-    'facebookAuth' :{
+    'facebookAuth': {
         'clientID': "279881526036438",
-        'clientSecret':'0f4e6e5031e76f56d7e7d5d615207d62',
+        'clientSecret': '0f4e6e5031e76f56d7e7d5d615207d62',
         'callbackURL': 'http://localhost:3000/api/auth/facebook/callback'
     },
 
@@ -9,8 +9,8 @@ module.exports = {
         "username": "root",
         "password": "root",
         "database": "deliciously",
-        "host": "127.0.0.1",
+        "host": "localhost",
         "dialect": "mysql",
         "operatorsAliases": false
     },
-}
+};

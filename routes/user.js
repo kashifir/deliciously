@@ -12,7 +12,7 @@ var confiAuth = require("../config/auth");
 process.env.SECRET_KEY = 'secret';
 
 //resgister new user
-module.exports = function(passport) {
+module.exports = function (passport) {
 
     router.post("/signup", (req, res) => {
         // find is user exist or not
@@ -45,29 +45,29 @@ module.exports = function(passport) {
             })
     });
 
-    router.get("/profile/:id",(req,res) =>{
+    router.get("/profile/:id", (req, res) => {
         db.user.findOne({
             where: {id: req.params.id}
         })
             .then(user => {
-                if(user){
+                if (user) {
                     res.send(user);
-                }else {
+                } else {
                     res.send({error: 'error'})
                 }
             }).catch(err => {
-                res.send(err);
+            res.send(err);
         })
 
     });
 
-    router.put("/update/:id",(req,res) =>{
-        db.user.update(req.body ,{
-            where:{id: req.params.id}
+    router.put("/update/:id", (req, res) => {
+        db.user.update(req.body, {
+                where: {id: req.params.id}
             }
         )
             .then(user => {
-                res.status(200).json(user);
+                res.status(200).json({user:user});
             })
             .catch(err => {
                 res.status(400).json(err);
@@ -79,37 +79,43 @@ module.exports = function(passport) {
     router.post("/login", (req, res) => {
         console.log(req.body);
         db.user.findOne({
-            where:{UEmail: req.body.uEmail}
+            where: {UEmail: req.body.uEmail}
         })
-        .then(user => {
-                if(user) {
+            .then(user => {
+                if (user) {
+                    console.log(user);
 
-                    if (bcrypt.compareSync(req.body.uPassword,user.UPassword)) {
-                        res.status(200).json({user: user})
+                    if (bcrypt.compareSync(req.body.uPassword, user.UPassword)) {
+                        res.status(200).json({"user":{
+                                id:user.id,
+                                uEmail:user.uEmail,
+                                uName:user.UName,
+                                uFirstName: user.UFirstName,
+                                uLastName: user.ULastName,
+                            }})
                     } else {
-                        res.status(400).send({error: 'error mail or error password'})
+                        res.status(404).json({error: 'error mail or error password'})
                     }
-                }
-                else {
+                } else {
                     return res.status(400).send({
                         error: 'user not fond'
                     });
                 }
             })
-                .catch(err => {
-                    res.send('error' + err)
-                })
+            .catch(err => {
+                res.send('error' + err)
+            })
     });
 
     router.post("/loginsite", (req, res) => {
         console.log(req.body);
         db.user.findOne({
-            where:{UEmail: req.body.email}
+            where: {UEmail: req.body.email}
         })
             .then(user => {
-                if(user) {
-                    console.log(bcrypt.compareSync(req.body.password,user.UPassword));
-                    if (bcrypt.compareSync(req.body.password,user.UPassword)) {
+                if (user) {
+                    console.log(bcrypt.compareSync(req.body.password, user.UPassword));
+                    if (bcrypt.compareSync(req.body.password, user.UPassword)) {
                         let token = jwt.sign(user.dataValues, process.env.SECRET_KEY, {
                             expiresIn: 1440
                         });
@@ -117,9 +123,8 @@ module.exports = function(passport) {
                     } else {
                         res.status(520).json('error mail or error password')
                     }
-                }
-                else {
-                    return res.status(400).send({
+                } else {
+                    return res.status(404).send({
                         error: 'user not fond'
                     });
                 }
@@ -147,17 +152,17 @@ module.exports = function(passport) {
         }));
 
     passport.use(new FacebookStrategy({
-        // id de l'app facebook
+            // id de l'app facebook
             clientID: confiAuth.facebookAuth.clientID,
-        // cle secret de l'app facebook
+            // cle secret de l'app facebook
             clientSecret: confiAuth.facebookAuth.clientSecret,
-        // perment de fait la redirection si la conn a éte
-        // fait dans cas envoi sur la page /
-        // sinon sur la page d'accueil
+            // perment de fait la redirection si la conn a éte
+            // fait dans cas envoi sur la page /
+            // sinon sur la page d'accueil
             callbackURL: confiAuth.facebookAuth.callbackURL,
             enableProof: true,
-        // les information que on récuperer via facebook pour les
-        //  user
+            // les information que on récuperer via facebook pour les
+            //  user
             profileFields: ['id', 'displayName', 'emails', 'photos']
         },
         function (accessToken, refreshToken, profile, done) {
@@ -171,7 +176,7 @@ module.exports = function(passport) {
                         // si le client exits
                         if (user) {
                             // return client
-                          done(user)
+                            done(user)
                             // sinon  on client créer le client
                         } else {
                             db.user.create({
@@ -180,7 +185,7 @@ module.exports = function(passport) {
                                 'UFirstName': profile.name.givenName,
                                 'ULastName': profile.name.familyName,
                                 'UEmail': profile.email,
-                                'FBImageURL' : profile.photos[0].value
+                                'FBImageURL': profile.photos[0].value
                             })
                                 .then(newuser => {
                                     // return nouveaux client
@@ -195,7 +200,7 @@ module.exports = function(passport) {
                     .catch(err => {
                         // si error alors return error
                         if (err) {
-                           done(err)
+                            done(err)
                         }
                     })
             })
@@ -203,7 +208,7 @@ module.exports = function(passport) {
     ));
 
 
-    router.post("/addVisitedContry",(req,res) => {
+    router.post("/addVisitedContry", (req, res) => {
         db.VisitedCountry.create(req.body)
             .then(newVisited => {
                 res.status(200).json(newVisited)
@@ -213,7 +218,7 @@ module.exports = function(passport) {
             })
     });
 
-    router.post("/addVisitedRestaurant",(req,res) => {
+    router.post("/addVisitedRestaurant", (req, res) => {
         db.VisitedRestaurant.create(res.body)
             .then(Visited => {
                 res.status(200).json(Visited)
@@ -223,7 +228,7 @@ module.exports = function(passport) {
             })
     });
 
-    router.post("/addFavouriteRestaurant",(req,res) => {
+    router.post("/addFavouriteRestaurant", (req, res) => {
         db.Favourite.create(req.body)
             .then(Favourite => {
                 res.status(200).json(Favourite)

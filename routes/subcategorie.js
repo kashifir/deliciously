@@ -4,7 +4,7 @@ let routesub = express.Router();
 let db = require("../database/db");
 
 
-routesub.get("/getAllSubCategorie",(req,res) => {
+routesub.get("/getAllSubCategorie", (req, res) => {
 
     db.Subcategory.findAll()
         .then(AllSubCat => {
@@ -15,7 +15,7 @@ routesub.get("/getAllSubCategorie",(req,res) => {
         })
 });
 
-routesub.post("/newSubCategorie",(req,res) => {
+routesub.post("/newSubCategorie", (req, res) => {
 
     db.Subcategory.create(req.body)
         .then(NewSubCat => {
@@ -26,7 +26,7 @@ routesub.post("/newSubCategorie",(req,res) => {
         })
 });
 
-routesub.put("/updateSubCategorie",(req,res) => {
+routesub.put("/updateSubCategorie", (req, res) => {
 
     db.Subcategory.update(req.body)
         .then(updatesub => {
@@ -37,9 +37,9 @@ routesub.put("/updateSubCategorie",(req,res) => {
         })
 });
 
-routesub.get("/FindOneSubCategotie/:name",(req,res) => {
+routesub.get("/FindOneSubCategotie/:name", (req, res) => {
     db.Subcategory.findOne({
-        where:{name: req.params.name}
+        where: {name: req.params.name}
     })
         .then(OneSubCate => {
             res.status(200).json(OneSubCate)

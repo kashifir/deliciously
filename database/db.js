@@ -10,7 +10,6 @@ const Sequelize = require('sequelize');
 const confiAuth = require("../config/auth");
 
 
-
 /************************************** end Require module **********************************************
  *******************************************************************************************************************/
 
@@ -18,7 +17,7 @@ const confiAuth = require("../config/auth");
 /************************************** Start connexion to database  **********************************************
  *****************************************************************************************************************/
 // make our const db ;
-const db ={};
+const db = {};
 
 // conn to database
 /**
@@ -36,13 +35,13 @@ const db ={};
  * @type {Sequelize}
  */
 
-const dbinfo = new Sequelize(confiAuth.development.database,confiAuth.development.username,confiAuth.development.password,{
+const dbinfo = new Sequelize(confiAuth.development.database, confiAuth.development.username, confiAuth.development.password, {
     host: confiAuth.development.host,
     dialect: confiAuth.development.dialect,
     port: 3306,
-    pool:{
-        max:5,
-        min:0,
+    pool: {
+        max: 5,
+        min: 0,
         acquire: 30000,
         idle: 10000,
     }
@@ -73,24 +72,26 @@ dbinfo.authenticate()
  *
  */
 
-db.Badge = require("../models/Badge")(dbinfo,Sequelize);
-db.Country = require("../models/Country")(dbinfo,Sequelize);
-db.ResBadge = require("../models/ResBadge")(dbinfo,Sequelize);
-db.ResCategory = require("../models/ResCategory")(dbinfo,Sequelize);
-db.ResSubCategory = require("../models/ResSubCategory")(dbinfo,Sequelize);
-db.Restaurant = require("../models/Restaurant")(dbinfo,Sequelize);
-db.Subcategory = require("../models/Subcategory")(dbinfo,Sequelize);
-db.user = require("../models/User")(dbinfo,Sequelize);
-db.Favourite = require("../models/UserFavouriteRestaurant")(dbinfo,Sequelize);
-db.UserResList = require("../models/UserResList")(dbinfo,Sequelize);
-db.UserType = require("../models/UserType")(dbinfo,Sequelize);
-db.VisitedRestaurant = require("../models/VisitedRestaurant")(dbinfo,Sequelize);
-db.Couleur = require('../models/Couleur')(dbinfo,Sequelize);
-db.Icon = require('../models/Icon')(dbinfo,Sequelize);
-db.VisitedCountry = require('../models/VisitedCountry')(dbinfo,Sequelize);
-db.ResComment = require('../models/ResComment')(dbinfo,Sequelize);
+db.Badge = require("../models/Badge")(dbinfo, Sequelize);
+db.Country = require("../models/Country")(dbinfo, Sequelize);
+db.ResBadge = require("../models/ResBadge")(dbinfo, Sequelize);
+db.ResCategory = require("../models/ResCategory")(dbinfo, Sequelize);
+db.ResSubCategory = require("../models/ResSubCategory")(dbinfo, Sequelize);
+db.Restaurant = require("../models/Restaurant")(dbinfo, Sequelize);
+db.Subcategory = require("../models/Subcategory")(dbinfo, Sequelize);
+db.user = require("../models/User")(dbinfo, Sequelize);
+db.Favourite = require("../models/UserFavouriteRestaurant")(dbinfo, Sequelize);
+db.UserResList = require("../models/UserResList")(dbinfo, Sequelize);
+db.UserType = require("../models/UserType")(dbinfo, Sequelize);
+db.VisitedRestaurant = require("../models/VisitedRestaurant")(dbinfo, Sequelize);
+db.Couleur = require('../models/Couleur')(dbinfo, Sequelize);
+db.Icon = require('../models/Icon')(dbinfo, Sequelize);
+db.VisitedCountry = require('../models/VisitedCountry')(dbinfo, Sequelize);
+db.ResComment = require('../models/ResComment')(dbinfo, Sequelize);
 db.ResFilterIcon = require('../models/ResFilterIcon')(dbinfo, Sequelize);
 db.UserListeRes = require('../models/UserListeRes')(dbinfo, Sequelize);
+db.BadgeCountry = require('../models/BadgesCountry')(dbinfo, Sequelize);
+db.ResHasBadgesCountry = require('../models/ResHasBadgesCountry')(dbinfo, Sequelize);
 
 
 /************************************** End block  Require models/tables **********************************************
@@ -110,23 +111,22 @@ db.UserListeRes = require('../models/UserListeRes')(dbinfo, Sequelize);
 
 
 // many to many 1,N ET 1,N
-db.user.hasMany(db.VisitedCountry,{foreignKey: 'userId'});
+db.user.hasMany(db.VisitedCountry, {foreignKey: 'userId'});
 db.Country.hasMany(db.VisitedCountry, {foreignKey: 'countryId'});
 
 
-db.user.belongsToMany(db.Restaurant,{ through: 'VisitedRestaurant',  foreignKey: 'userId'});
-db.Restaurant.belongsToMany(db.user,{ through: 'VisitedRestaurant', foreignKey: 'restaurantId'});
+db.user.belongsToMany(db.Restaurant, {through: 'VisitedRestaurant', foreignKey: 'userId'});
+db.Restaurant.belongsToMany(db.user, {through: 'VisitedRestaurant', foreignKey: 'restaurantId'});
 
 db.user.hasOne(db.UserResList, {foreignKey: 'userId'});
 db.Icon.hasOne(db.UserResList, {foreignKey: 'IconId'});
 db.Couleur.hasOne(db.UserResList, {foreignKey: 'CouleurId'});
 
-db.UserResList.hasMany(db.UserListeRes,{foreignKey: 'listId'});
-db.Restaurant.hasMany(db.UserListeRes,{foreignKey: 'restaurantId'});
+db.UserResList.hasMany(db.UserListeRes, {foreignKey: 'listId'});
+db.Restaurant.hasMany(db.UserListeRes, {foreignKey: 'restaurantId'});
 
 db.Restaurant.hasMany(db.ResComment, {foreignKey: 'restaurantId'});
 db.user.hasMany(db.ResComment, {foreignKey: 'userId'});
-
 
 
 db.Badge.belongsToMany(db.Restaurant, {through: 'ResBadge', foreignKey: 'badgeId'});
@@ -135,6 +135,9 @@ db.Restaurant.belongsToMany(db.Badge, {through: 'ResBadge', foreignKey: 'restaur
 db.Badge.hasMany(db.ResBadge, {foreignKey: 'badgeId'});
 db.Restaurant.hasMany(db.ResBadge, {foreignKey: 'restaurantId'});
 
+
+db.Restaurant.hasMany(db.ResHasBadgesCountry, {foreignKey: 'restaurantId'});
+db.BadgeCountry.hasMany(db.ResHasBadgesCountry, {foreignKey: 'badgescountryId'});
 
 
 db.ResCategory.hasOne(db.Restaurant, {foreignKey: 'rescategoryId'});
@@ -152,8 +155,6 @@ db.Restaurant.hasOne(db.Favourite, {foreignKey: 'restaurantId'});
 db.user.hasOne(db.Favourite, {foreignKey: 'userId'});
 
 
-
-
 /**************************************************** End of block Relation ***************************************************
  *******************************************************************************************************************************/
 
@@ -165,8 +166,8 @@ db.Sequelize = Sequelize;
  * Sync all defined models to the DB.
  * similar for sync: you can define this to always force sync for models
  */
-
 //dbinfo.sync({ force: true });
+//dbinfo.sync();
 
 /**
  * The module.exports or exports is a special object which is included in every JS file in the Node.js application by
