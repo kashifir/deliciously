@@ -141,11 +141,13 @@ db.BadgeCountry.hasMany(db.ResHasBadgesCountry, {foreignKey: 'badgescountryId'})
 
 
 db.ResCategory.hasOne(db.Restaurant, {foreignKey: 'rescategoryId'});
+db.Restaurant.belongsTo(db.ResCategory, {foreignKey: 'rescategoryId'});
 
 db.Restaurant.hasMany(db.ResSubCategory, {foreignKey: 'restaurantId'});
 db.Subcategory.hasMany(db.ResSubCategory, {foreignKey: 'subcategoryId'});
 
 db.Country.hasOne(db.Restaurant, {foreignKey: 'countryId'});
+db.Restaurant.belongsTo(db.Country, {foreignKey: 'countryId'});
 
 db.Restaurant.hasMany(db.ResFilterIcon, {foreignKey: 'restaurantId'});
 db.ResFilterIcon.belongsTo(db.Restaurant, {foreignKey: 'restaurantId'});
