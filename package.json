@@ -32,7 +32,7 @@
     "nodemon": "1.18.4",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
-    "sequelize": "^4.38.0",
+    "sequelize": "^5.15.1",
     "sequelize-datatables": "^1.2.1"
   }
 }
