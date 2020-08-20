@@ -19,7 +19,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/VRSquadTeam/deliciously-api#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.15.2",
     "cors": "2.8.4",
     "csv": "^0.3.7",
